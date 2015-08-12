@@ -11,7 +11,38 @@
 <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
     <script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
-  
+  <script>
+  //ASSIGNMENTS
+document.addEventListener('DOMContentLoaded', function() {
+        var assignmentURL= 'https://docs.google.com/spreadsheets/d/19Oe0hz7QaA-vs74yPim3dhQWnXNZMPvijJO7QyJuEfE/pubhtml';
+        Tabletop.init( { key: assignmentURL, callback: displayAssignments, simpleSheet: true } )
+        var classURL= 'https://docs.google.com/spreadsheets/d/10TV1KweNg-YcK2p8gVNk2LOk37r1Ev8iAbzHgzqh8fg/pubhtml';
+        Tabletop.init( { key: classURL, callback: displayClasses, simpleSheet: true } )
+        
+}) 
+
+//var geojson;
+
+function displayAssignments(data) {
+ 	console.log(data);
+	places = []
+	for (i = 0; i < data.length; i++) {    
+		document.getElementById("thing1").innerHTML += data[i].Assignment + "<br>" + data[i].Description + "<br>" + data[i].Type + "<br>" + data[i].Priority + " priority"+ "<br>"+ "Due on: "+ data[i].DueDate + "<p>";
+		document.getElementById("thing3").innerHTML += data[i].Assignment + "<br>" + data[i].Description + "<br>" + data[i].Type + "<br>" + data[i].Priority + " priority"+"<br>"+  "Due on: "+ data[i].DueDate + "<p>";
+    }	   
+ }
+ 
+ 
+ //CLASSES
+function displayClasses(data) {
+ 	console.log(data);
+	places2 = []
+	for (i = 0; i < data.length; i++) {
+		document.getElementById("things2").innerHTML += data[i].Name + "<br>" + "Period"+ " "+ data[i].Period + "<br>" + data[i].Occurance + "<p>";
+    }	   
+ }
+	
+  </script>
     		
 </head>
 
@@ -115,5 +146,7 @@
 	<iframe src="https://docs.google.com/forms/d/17hv3BRwB181hE6zC9YG6RSeHhgnlPvcXth_7Fdsw0rI/viewform?embedded=true" width="100%" height = "1300pt" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe> <br>
 	<a href = "#AssignmentsPage"> See all of your Assignments</a>
 	
-</div>	
+</div>
+
+
 
