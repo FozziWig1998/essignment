@@ -73,6 +73,7 @@
 	</div>
 	<div data-role = "content">
 		<div id = "thing1"></div>
+		<a href = "#CheckOffAssignments"> Check Off an Assignment</a><br> <br>
 		<center><a href="#ClassesPage"> <img id = "class" src = "https://scontent-ord1-1.xx.fbcdn.net/hphotos-xpf1/v/t1.0-9/11870929_1635284703377490_5987546691993714117_n.jpg?oh=c43e58b377e8ed97ed17421bc0a74092&oe=56792079" width=100 height=100></img><br> Click here to see your classes! </a></center>
 		
 		
@@ -107,6 +108,7 @@
 	<script>//alert('hi')</script>
 	<p><div id = "thing3"></div></p>
 	<a href = "#AddAssignments"> Add an Assignment</a><br> <br>
+	<a href = "#CheckOffAssignments"> Check Off an Assignment</a><br> <br>
 	<a href = "#HomePage"> Go back to home</a>
 	</div>
 </div>	
@@ -115,8 +117,13 @@
 	<p> NOTE: If you have recently added a new class, you must submit a new assignment before that class appears as an option in the form.</p>
 	<a href = "#AssignmentsPage"> See all of your Assignments</a>
 	
+	
 </div>	
-
+<div data-role  = "page" id = "CheckOffAssignments">
+	<iframe src="https://docs.google.com/forms/d/1RcnbFNr3krTw9PjcdShKCqeBK6jRHYw4gZHdZNkoXoU/viewform?embedded=true" width="760" height="500" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe> <br>
+	
+	<a href = "#AssignmentsPage"> See all of your Assignments</a>
+	</div>
 <script>
 //ASSIGNMENTS
 document.addEventListener('DOMContentLoaded', function() {
