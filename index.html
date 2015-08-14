@@ -109,6 +109,7 @@
 	<p><div id = "thing3"></div></p>
 	<a href = "#AddAssignments"> Add an Assignment</a><br> <br>
 	<a href = "#CheckOffAssignments"> Check Off an Assignment</a><br> <br>
+	<a href = "#OldAssignments"> View Previous Assignments</a><br> <br>
 	<a href = "#HomePage"> Go back to home</a>
 	</div>
 </div>	
@@ -123,7 +124,17 @@
 	<iframe src="https://docs.google.com/forms/d/1RcnbFNr3krTw9PjcdShKCqeBK6jRHYw4gZHdZNkoXoU/viewform?embedded=true" width="100%" height="1500pt" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe> <br>
 	<p> NOTE: You may only check off one assignment at a time. </p>
 	<a href = "#AssignmentsPage"> See all of your Assignments</a>
+</div>
+<div data-role  = "page" id = "OldAssignments">
+	<div data-role = "header">
+		<center><h3> Previous Assignments </h3></center>
 	</div>
+	<div data-role = "content">
+		<div id = "thing4"></div>
+		<a href = "#AssignmentsPage"> See all of your Assignments</a><br>
+		<a href = "#HomePage"> Go back to home</a>
+	</div>
+</div>
 <script>
 //ASSIGNMENTS
 document.addEventListener('DOMContentLoaded', function() {
@@ -138,16 +149,14 @@ document.addEventListener('DOMContentLoaded', function() {
         Tabletop.init( { key: classURL, callback: displayClasses, simpleSheet: true } )
      
 })
-
 //var geojson;
-
 var assignment;
- 	
+var oldAssignments = []; 
+	
 function completed(data){
  	console.log(data);
  	assignment = data;
  }
-
 function displayAssignments(data) {
  	console.log(data);
  	var found;
@@ -159,6 +168,8 @@ function displayAssignments(data) {
  			document.getElementById("thing1").innerHTML += "<del>" + data[i].Assignment + "</del>" + "<br>" ;
  			
  			document.getElementById("thing3").innerHTML += "<del>" + data[i].Assignment + "</del>" + "<br>" ; 
+ 			oldAssignments.push(data[i]);
+ 			
  		}
  	}
 	
@@ -171,7 +182,12 @@ function displayAssignments(data) {
 	
 			document.getElementById("thing3").innerHTML += "<b>" + data[i].Assignment + "</b>" + "<br>" + "<font face='courier new'>" + data[i].Description + "</font>" + "<br>" + data[i].AssignmentClass + "<br>" + "<i>" + data[i].SubAssignments + "</i>" + "<br>" + data[i].Type + "<br>" + data[i].Priority + " priority"+"<br>" + "<mark>" +  "Due on: "+ data[i].DueDate + "</mark>" + "<br>" + "<br>" ;
 	}
-    }	   
+    }
+    for (k=0; k < oldAssignments.length; k++) {   
+    		console.log(oldAssignments);
+ 			document.getElementById("thing4").innerHTML += "<br>" + "<b>" + oldAssignments[k].Assignment + "</b>" + "<br>" + "<font face='courier new'>" + oldAssignments[k].Description + "</font>" + "<br>" + oldAssignments[k].AssignmentClass + "<br>" + "<i>" + oldAssignments[k].SubAssignments + "</i>" + "<br>" + oldAssignments[k].Type + "<br>" + oldAssignments[k].Priority + " priority"+ "<br>"+ "<mark>" + "Due on: "+ oldAssignments[k].DueDate + "</mark>" + "<br>" + "<br>" ;
+ 			
+    }
  }
  
  
@@ -187,13 +203,11 @@ function displayClasses(data) {
 <script>
 (function(global) {
   "use strict";
-
   var inNodeJS = false;
   if (typeof module !== 'undefined' && module.exports) {
     inNodeJS = true;
     var request = require('request');
   }
-
   var supportsCORS = false;
   var inLegacyIE = false;
   try {
@@ -207,7 +221,6 @@ function displayClasses(data) {
       }
     }
   } catch (e) { }
-
   // Create a simple indexOf function for support
   // of older browsers.  Uses native indexOf if 
   // available.  Code similar to underscores.
@@ -230,7 +243,6 @@ function displayClasses(data) {
       OR!
     Initialize with Tabletop.init('0AjAPaAU9MeLFdHUxTlJiVVRYNGRJQnRmSnQwTlpoUXc')
   */
-
   var Tabletop = function(options) {
     // Make sure Tabletop is being used as a constructor no matter what.
     if(!this || !(this instanceof Tabletop)) {
@@ -240,7 +252,6 @@ function displayClasses(data) {
     if(typeof(options) === 'string') {
       options = { key : options };
     }
-
     this.callback = options.callback;
     this.wanted = options.wanted || [];
     this.key = options.key;
@@ -283,24 +294,18 @@ function displayClasses(data) {
       this.log("You passed an old Google Docs url as the key! Attempting to parse.");
       this.key = this.key.match("key=(.*?)(&|#|$)")[1];
     }
-
     if(/pubhtml/.test(this.key)) {
       this.log("You passed a new Google Spreadsheets url as the key! Attempting to parse.");
       this.key = this.key.match("d\\/(.*?)\\/pubhtml")[1];
     }
-
     if(!this.key) {
       this.log("You need to pass Tabletop a key!");
       return;
     }
-
     this.log("Initializing with key " + this.key);
-
     this.models = {};
     this.model_names = [];
-
     this.base_json_path = "/feeds/worksheets/" + this.key + "/public/basic?alt=";
-
     if (inNodeJS || supportsCORS) {
       this.base_json_path += 'json';
     } else {
@@ -311,21 +316,16 @@ function displayClasses(data) {
       this.fetch();
     }
   };
-
   // A global storage for callbacks.
   Tabletop.callbacks = {};
-
   // Backwards compatibility.
   Tabletop.init = function(options) {
     return new Tabletop(options);
   };
-
   Tabletop.sheets = function() {
     this.log("Times have changed! You'll want to use var tabletop = Tabletop.init(...); tabletop.sheets(...); instead of Tabletop.sheets(...)");
   };
-
   Tabletop.prototype = {
-
     fetch: function(callback) {
       if(typeof(callback) !== "undefined") {
         this.callback = callback;
@@ -352,7 +352,6 @@ function displayClasses(data) {
         }
       }
     },
-
     /*
       Use Cross-Origin XMLHttpRequest to get the data in browsers that support it.
     */
@@ -376,7 +375,6 @@ function displayClasses(data) {
       Insert the URL into the page as a script tag. Once it's loaded the spreadsheet data
       it triggers the callback. This helps you avoid cross-domain errors
       http://code.google.com/apis/gdata/samples/spreadsheet_sample.html
-
       Let's be plain-Jane and not use jQuery or anything.
     */
     injectScript: function(path, callback) {
@@ -436,7 +434,6 @@ function displayClasses(data) {
         callback.call(self, body);
       });
     },
-
     /* 
       Is this a sheet you want to pull?
       If { wanted: ["Sheet1"] } has been specified, only Sheet1 is imported
@@ -470,7 +467,6 @@ function displayClasses(data) {
         return this.models;
       }
     },
-
     /*
       Add another sheet to the wanted list
     */
@@ -485,14 +481,12 @@ function displayClasses(data) {
       Need to use injectScript because the worksheet view that you're working from
       doesn't actually include the data. The list-based feed (/feeds/list/key..) does, though.
       Calls back to loadSheet in order to get the real work done.
-
       Used as a callback for the worksheet-based JSON
     */
     loadSheets: function(data) {
       var i, ilen;
       var toLoad = [];
       this.foundSheetNames = [];
-
       for(i = 0, ilen = data.feed.entry.length; i < ilen ; i++) {
         this.foundSheetNames.push(data.feed.entry[i].title.$t);
         // Only pull in desired sheets to reduce loading
@@ -517,13 +511,11 @@ function displayClasses(data) {
           toLoad.push(json_path);
         }
       }
-
       this.sheetsToLoad = toLoad.length;
       for(i = 0, ilen = toLoad.length; i < ilen; i++) {
         this.requestData(toLoad[i], this.loadSheet);
       }
     },
-
     /*
       Access layer for the this.models
       .sheets() gets you all of the sheets
@@ -541,13 +533,11 @@ function displayClasses(data) {
         }
       }
     },
-
     sheetReady: function(model) {
       this.models[ model.name ] = model;
       if(ttIndexOf(this.model_names, model.name) === -1) {
         this.model_names.push(model.name);
       }
-
       this.sheetsToLoad--;
       if(this.sheetsToLoad === 0)
         this.doCallback();
@@ -555,7 +545,6 @@ function displayClasses(data) {
     
     /*
       Parse a single list-based worksheet, turning it into a Tabletop Model
-
       Used as a callback for the list-based JSON
     */
     loadSheet: function(data) {
@@ -569,7 +558,6 @@ function displayClasses(data) {
                                           that.sheetReady(this);
                                         } } );
     },
-
     /*
       Execute the callback upon loading! Rely on this.data() because you might
         only request certain pieces of data (i.e. simpleSheet mode)
@@ -580,7 +568,6 @@ function displayClasses(data) {
         this.callback.apply(this.callbackContext || this, [this.data(), this]);
       }
     },
-
     log: function(msg) {
       if(this.debug) {
         if(typeof console !== "undefined" && typeof console.log !== "undefined") {
@@ -588,13 +575,10 @@ function displayClasses(data) {
         }
       }
     }
-
   };
-
   /*
     Tabletop.Model stores the attribute names and parses the worksheet data
       to turn it into something worthwhile
-
     Options should be in the format { data: XXX }, with XXX being the list-based worksheet
   */
   Tabletop.Model = function(options) {
@@ -605,7 +589,6 @@ function displayClasses(data) {
     this.elements = [];
     this.onReady = options.onReady;
     this.raw = options.data; // A copy of the sheet's raw data, for accessing minutiae
-
     if(typeof(options.data.feed.entry) === 'undefined') {
       options.tabletop.log("Missing data for " + this.name + ", make sure you didn't forget column headers");
       this.original_columns = [];
@@ -618,7 +601,6 @@ function displayClasses(data) {
       if(/^gsx/.test(key))
         this.column_names.push( key.replace("gsx$","") );
     }
-
     this.original_columns = this.column_names;
     
     for(i = 0, ilen =  options.data.feed.entry.length ; i < ilen; i++) {
@@ -647,7 +629,6 @@ function displayClasses(data) {
     else
       this.onReady.call(this);
   };
-
   Tabletop.Model.prototype = {
     /*
       Returns all of the elements (rows) of the worksheet as objects
@@ -677,12 +658,9 @@ function displayClasses(data) {
      */
     loadPrettyColumns: function(data) {
       var pretty_columns = {};
-
       var column_names = this.column_names;
-
       var i = 0;
       var l = column_names.length;
-
       for (; i < l; i++) {
         if (typeof data.feed.entry[i].content.$t !== 'undefined') {
           pretty_columns[column_names[i]] = data.feed.entry[i].content.$t;
@@ -690,9 +668,7 @@ function displayClasses(data) {
           pretty_columns[column_names[i]] = column_names[i];
         }
       }
-
       this.pretty_columns = pretty_columns;
-
       this.prettifyElements();
       this.ready();
     },
@@ -706,12 +682,10 @@ function displayClasses(data) {
       var pretty_elements = [],
           ordered_pretty_names = [],
           i, j, ilen, jlen;
-
       var ordered_pretty_names;
       for(j = 0, jlen = this.column_names.length; j < jlen ; j++) {
         ordered_pretty_names.push(this.pretty_columns[this.column_names[j]]);
       }
-
       for(i = 0, ilen = this.elements.length; i < ilen; i++) {
         var new_element = {};
         for(j = 0, jlen = this.column_names.length; j < jlen ; j++) {
@@ -723,7 +697,6 @@ function displayClasses(data) {
       this.elements = pretty_elements;
       this.column_names = ordered_pretty_names;
     },
-
     /*
       Return the elements as an array of arrays, instead of an array of objects
     */
@@ -740,7 +713,6 @@ function displayClasses(data) {
       return array;
     }
   };
-
   if(inNodeJS) {
     module.exports = Tabletop;
   } else if (typeof define === 'function' && define.amd) {
@@ -750,9 +722,7 @@ function displayClasses(data) {
   } else {
     global.Tabletop = Tabletop;
   }
-
 })(this);
-
 </script>
 </body>
 </html>
